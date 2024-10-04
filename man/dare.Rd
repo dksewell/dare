@@ -10,7 +10,7 @@ dare(
   dose_response = c("beta-poisson", "exponential", "simple_threshold")[1],
   prior_regr_coefs = list(mean = 0, sd = 2.5, autoscale = TRUE),
   prior_regr_intercept = list(mean = 0, sd = 10),
-  prior_sigma_df = 3,
+  prior_sigma = list(shape = 2, rate = 2),
   prior_alpha_rate = 1,
   nonlinear_time = FALSE,
   CI_level = 0.95,
@@ -38,8 +38,8 @@ rescaled according to the standard deviation of the columns of the design matrix
 
 \item{prior_regr_intercept}{named list, same as prior_regr_coefs, except no autoscale argument}
 
-\item{prior_sigma_df}{positive number giving the degrees of freedom for the half-t
-prior on the standard deviation of the mean dose distribution}
+\item{prior_sigma}{named list, giving the shape and rate of the gamma prior on sigma,
+the standard deviation of the mean dose distribution}
 
 \item{prior_alpha_rate}{positive value giving the rate of the exponential
 prior on alpha (for beta-poisson model only)}

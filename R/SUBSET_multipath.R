@@ -63,17 +63,6 @@ SUBSET_multipath = function(objects,
   }
 
   # Get prior draws of beta
-  rhalft = function(n,df){
-    draws = rt(n,df = df)
-
-    while(min(draws) < 0){
-      negative_index = which(draws < 0)
-      draws[negative_index] =
-        rt(length(negative_index),df = df)
-    }
-
-    draws
-  }
 
   prior_draws =
     do.call(
@@ -86,7 +75,9 @@ SUBSET_multipath = function(objects,
                                                    X$prior_regr_coefs$sd)),
                                       n_prior_draws,
                                       P),
-                               log(rhalft(n_prior_draws,X$prior_sigma_df)),
+                               log(rgamma(n_prior_draws,
+                                          shape = X$prior_sigma$shape,
+                                          rate = X$prior_sigma$rate)),
                                log(rexp(n_prior_draws,X$prior_alpha_rate)))
              )
       )

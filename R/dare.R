@@ -16,8 +16,8 @@
 #'  rescaled according to the standard deviation of the columns of the design matrix
 #'  }
 #' @param prior_regr_intercept named list, same as prior_regr_coefs, except no autoscale argument
-#' @param prior_sigma_df positive number giving the degrees of freedom for the half-t
-#'  prior on the standard deviation of the mean dose distribution
+#' @param prior_sigma named list, giving the shape and rate of the gamma prior on sigma, 
+#' the standard deviation of the mean dose distribution
 #' @param prior_alpha_rate positive value giving the rate of the exponential
 #'  prior on alpha (for beta-poisson model only)
 #' @param nonlinear_time logical.  Set to TRUE if the expected dose should be the rate
@@ -50,7 +50,7 @@ dare = function(formula,
                 dose_response = c("beta-poisson","exponential","simple_threshold")[1],
                 prior_regr_coefs = list(mean = 0, sd = 2.5, autoscale = TRUE),
                 prior_regr_intercept = list(mean = 0, sd = 10),
-                prior_sigma_df = 3,
+                prior_sigma = list(shape = 2,rate = 2),
                 prior_alpha_rate = 1,
                 nonlinear_time = FALSE,
                 CI_level = 0.95,
@@ -205,7 +205,7 @@ dare = function(formula,
                   prior_regr_coefs$mean,
                   prior_regr_coefs$sd,
                   log = TRUE)) -
-        dt(sig,df = prior_sigma_df, log = TRUE) - log(sig) -
+        dgamma(sig,shape = prior_sigma$shape, rate = prior_sigma$rate, log = TRUE) - log(sig) -
         dexp(a,rate = prior_alpha_rate, log = TRUE) - log(a)
     }
 
@@ -324,9 +324,10 @@ dare = function(formula,
                 prior_regr_coefs$mean,
                 prior_regr_coefs$sd,
                 log = TRUE)) -
-      dt(results$summary$`Posterior Median`[P+1],
-         df = prior_sigma_df,
-         log = TRUE) - log(results$summary$`Posterior Median`[P+1]) -
+      dgamma(results$summary$`Posterior Median`[P+1],
+             shape = prior_sigma$shape,
+             rate = prior_sigma$rate,
+             log = TRUE) - log(results$summary$`Posterior Median`[P+1]) -
       dexp(results$summary$`Posterior Median`[P+2],
            rate = prior_alpha_rate,
            log = TRUE) - log(results$summary$`Posterior Median`[P+2])
@@ -337,7 +338,7 @@ dare = function(formula,
 
     results$prior_regr_coefs = prior_regr_coefs
     results$prior_regr_intercept = prior_regr_intercept
-    results$prior_sigma_df = prior_sigma_df
+    results$prior_sigma = prior_sigma
     results$prior_alpha_rate = prior_alpha_rate
     results$formula = formula
 
@@ -378,7 +379,7 @@ dare = function(formula,
                   prior_regr_coefs$mean,
                   prior_regr_coefs$sd,
                   log = TRUE)) -
-        dt(sig,df = prior_sigma_df, log = TRUE) - log(sig)
+        dgamma(sig,shape = prior_sigma$shape, rate = prior_sigma$rate, log = TRUE) - log(sig)
     }
 
     ## Get initial values
@@ -494,9 +495,10 @@ dare = function(formula,
                 prior_regr_coefs$mean,
                 prior_regr_coefs$sd,
                 log = TRUE)) -
-      dt(results$summary$`Posterior Median`[P+1],
-         df = prior_sigma_df,
-         log = TRUE) - log(results$summary$`Posterior Median`[P+1])
+      dgamma(results$summary$`Posterior Median`[P+1],
+             shape = prior_sigma$shape,
+             rate = prior_sigma$rate,
+             log = TRUE) - log(results$summary$`Posterior Median`[P+1])
 
     results$data = data_clean
 
@@ -504,7 +506,7 @@ dare = function(formula,
 
     results$prior_regr_coefs = prior_regr_coefs
     results$prior_regr_intercept = prior_regr_intercept
-    results$prior_sigma_df = prior_sigma_df
+    results$prior_sigma = prior_sigma
     results$formula = formula
 
     results$errors = errors
