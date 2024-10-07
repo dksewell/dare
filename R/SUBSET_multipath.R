@@ -202,7 +202,8 @@ SUBSET_multipath = function(objects,
   # Return results
   for(j in 1:n_pathogens){
     objects[[j]]$summary$`Posterior Median` =
-      Mean[(P + 2)*(j-1) + 1:(P + 2)]
+      c(Mean[(P + 2)*(j-1) + 1:P],
+        exp(Mean[(P + 2)*(j-1) + P + 1:2]))
     objects[[j]]$summary$`Posterior SD` =
       sqrt(diag(Sigma[(P + 2)*(j-1) + 1:(P + 2),
                       (P + 2)*(j-1) + 1:(P + 2)]))
