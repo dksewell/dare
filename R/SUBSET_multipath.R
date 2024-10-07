@@ -25,8 +25,10 @@ SUBSET_multipath = function(objects,
                             n_prior_draws = 500,
                             nu_max,
                             nu){
+  warning("Currently only implemented for beta-Poisson dose-response model.")
+  
   # Get basic quantities
-
+  
   n_pathogens = length(objects)
 
   P =
