@@ -5,9 +5,11 @@
 #' @param newdata An optional data frame in which to look for variables with which to predict. 
 #' If omitted, the original data are used.  NOTE: If not missing, this must include 
 #' a variable called 'time_diff'
+#' @param CI_level the level of credible intervals to be provided
 #' @param n_monte_carlo_draws Number of samples used in Monte Carlo estimation.
 #'
-#' @returns updated newdata data.frame with y_hat added as a variable.
+#' @returns updated newdata data.frame with incidence_estimate, 
+#' incidence_lower, and incidence_upper added as a variables to newdata.
 #'
 #' @importFrom mvtnorm rmvnorm
 #' @export predict.dare
@@ -15,6 +17,7 @@
 
 predict.dare = function(object,
                         newdata,
+                        CI_level = 0.95,
                         n_monte_carlo_draws = 1e3){
   
   dose_response = 
@@ -77,31 +80,35 @@ predict.dare = function(object,
   
   
   # Get draws from posterior predictive density
-  y_new = 
+  incidence = 
     matrix(0L,n_monte_carlo_draws,n)
   
   for(iter in 1:n_monte_carlo_draws){
     
     if(dose_response == "beta-poisson"){
       
-      y_new[iter,] = 
-        rbinom(n,1,
-               prob =  (1.0 - (1.0 + exp( X %*% mc_draws[iter,1:P] + 
-                                           rnorm(n,
-                                                 sd = mc_draws[iter,P + 1]) ))^(- mc_draws[iter,P + 2])))
+      incidence[iter, ] =
+        (1.0 - (1.0 + 
+                  newdata$time_diff * 
+                  exp( X %*% mc_draws[iter,1:P] + 
+                         rnorm(n,
+                               sd = mc_draws[iter,P + 1]) ))^(- mc_draws[iter,P + 2]))
       
     }else{
       
-      y_new[iter,] = 
-        rbinom(n,1,
-               prob =  (1.0 - exp(-exp( X %*% mc_draws[iter,1:P] + rnorm(n,
-                                                                         sd = mc_draws[iter,P + 1])))))
+      incidence[iter, ] = 
+        (1.0 - exp(-newdata$time_diff * 
+                     exp( X %*% mc_draws[iter,1:P] + rnorm(n,
+                                                           sd = mc_draws[iter,P + 1]))))
       
     }
   }
   
-  
-  newdata$y_hat = colMeans(y_new)
+  newdata$incidence_estimate = colMeans(incidence)
+  newdata$incidence_lower = 
+    apply(incidence,2,quantile,probs = (1.0 - CI_level)/2)
+  newdata$incidence_upper = 
+    apply(incidence,2,quantile,probs = 1.0 - (1.0 - CI_level)/2)
   
   return(newdata)
 }
