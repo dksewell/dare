@@ -4,7 +4,7 @@
 \alias{predict.dare}
 \title{Prediction function for the DARE model}
 \usage{
-\method{predict}{dare}(object, newdata, n_monte_carlo_draws = 1000)
+\method{predict}{dare}(object, newdata, CI_level = 0.95, n_monte_carlo_draws = 1000)
 }
 \arguments{
 \item{object}{object of class 'dare'}
@@ -13,10 +13,13 @@
 If omitted, the original data are used.  NOTE: If not missing, this must include
 a variable called 'time_diff'}
 
+\item{CI_level}{the level of credible intervals to be provided}
+
 \item{n_monte_carlo_draws}{Number of samples used in Monte Carlo estimation.}
 }
 \value{
-updated newdata data.frame with y_hat added as a variable.
+updated newdata data.frame with incidence_estimate,
+incidence_lower, and incidence_upper added as a variables to newdata.
 }
 \description{
 Prediction function for the DARE model
