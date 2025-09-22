@@ -3,7 +3,8 @@
 #' Use longitudinal data to estimate risk ratios of accruing dose
 #'
 #' @param formula an object of class "formula" (or one that can be coerced to
-#' that class): a symbolic description of the model to be fitted.
+#' that class): a symbolic description of the model to be fitted.  Format should be 
+#' <response> ~ <fixed effect 1> + <fixed effect 2> + ... + (<time variable> | <id>)
 #' @param data a data.frame containing the variables in the model.
 #' @param dose_response The dose-response model to be used.  Either the
 #' beta-poisson, exponential.  The simple threshold model is not finished yet.
