@@ -4,7 +4,7 @@
 #'
 #' @param formula an object of class "formula" (or one that can be coerced to
 #' that class): a symbolic description of the model to be fitted.  Format should be 
-#' <response> ~ <fixed effect 1> + <fixed effect 2> + ... + (<time variable> | <id>)
+#' response ~ fixed effect 1 + fixed effect 2 + ... + (time variable | id)
 #' @param data a data.frame containing the variables in the model.  Each observation,  
 #' positive or negative, should be its own row.  Data will automatically be formatted 
 #' and censored correctly for the analysis.

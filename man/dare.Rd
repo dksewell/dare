@@ -21,7 +21,7 @@ dare(
 \arguments{
 \item{formula}{an object of class "formula" (or one that can be coerced to
 that class): a symbolic description of the model to be fitted.  Format should be
-\if{html}{\out{<response>}} ~ <fixed effect 1> + <fixed effect 2> + ... + (\if{html}{\out{<time variable>}} | \if{html}{\out{<id>}})}
+response ~ fixed effect 1 + fixed effect 2 + ... + (time variable | id)}
 
 \item{data}{a data.frame containing the variables in the model.  Each observation,
 positive or negative, should be its own row.  Data will automatically be formatted
