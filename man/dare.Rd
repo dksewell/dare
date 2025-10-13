@@ -23,7 +23,9 @@ dare(
 that class): a symbolic description of the model to be fitted.  Format should be
 \if{html}{\out{<response>}} ~ <fixed effect 1> + <fixed effect 2> + ... + (\if{html}{\out{<time variable>}} | \if{html}{\out{<id>}})}
 
-\item{data}{a data.frame containing the variables in the model.}
+\item{data}{a data.frame containing the variables in the model.  Each observation,
+positive or negative, should be its own row.  Data will automatically be formatted
+and censored correctly for the analysis.}
 
 \item{dose_response}{The dose-response model to be used.  Either the
 beta-poisson, exponential.  The simple threshold model is not finished yet.}
