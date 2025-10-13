@@ -20,7 +20,8 @@ dare(
 }
 \arguments{
 \item{formula}{an object of class "formula" (or one that can be coerced to
-that class): a symbolic description of the model to be fitted.}
+that class): a symbolic description of the model to be fitted.  Format should be
+\if{html}{\out{<response>}} ~ <fixed effect 1> + <fixed effect 2> + ... + (\if{html}{\out{<time variable>}} | \if{html}{\out{<id>}})}
 
 \item{data}{a data.frame containing the variables in the model.}
 
