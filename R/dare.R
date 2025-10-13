@@ -111,7 +111,7 @@ dare = function(formula,
       data_clean |>
       dplyr::group_by(pick(varnames$id)) |>
       dplyr::arrange(pick(varnames$time)) |>
-      dplyr::mutate(time_diff = time - min(time)) |>
+      dplyr::mutate(time_diff := get(varnames$time) - min(get(varnames$time))) |>
       dplyr::ungroup() |>
       dplyr::arrange(pick(varnames$id,"time_diff")) |>
       dplyr::relocate(all_of(c(varnames$id,varnames$time,"time_diff",varnames$y)))
