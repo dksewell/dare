@@ -71,12 +71,12 @@ predict.dare = function(object,
   
   # Get posterior draws of parameters
   mc_draws = 
-      mvtnorm::rmvnorm(n_monte_carlo_draws,
-                       mean = 
-                         c(object$summary$`Posterior Median`[1:P],
-                           log(object$summary$`Posterior Median`[P + 1:2])),
-                       sigma = object$asymptotic_covariance)
-  mc_draws[,P + 1:2] = exp(mc_draws[,P + 1:2])
+    mvtnorm::rmvnorm(n_monte_carlo_draws,
+                     mean = 
+                       c(object$summary$`Posterior Median`[1:P],
+                         log(object$summary$`Posterior Median`[(P + 1):nrow(object$summary)])),
+                     sigma = object$asymptotic_covariance)
+  mc_draws[,(P + 1):nrow(object$summary)] = exp(mc_draws[,(P + 1):nrow(object$summary)])
   
   
   # Get draws from posterior predictive density
